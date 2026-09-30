@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Outreach</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%99%82%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="bg-blobs" aria-hidden="true">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+</div>
+
+<div class="app">
+  <div class="app-shell">
+
+    <aside class="sidebar">
+      <div class="brand">
+        <h1 class="logo">Outreach</h1>
+        <p class="brand-email" id="brandEmail">Not connected</p>
+      </div>
+      <nav>
+        <button class="nav-btn" data-view="emails">Emails</button>
+        <button class="nav-btn" data-view="followups">Follow-ups</button>
+        <button class="nav-btn" data-view="template">Template</button>
+        <button class="nav-btn" data-view="resume">Resume</button>
+        <button class="nav-btn" data-view="settings">Settings</button>
+      </nav>
+      <div class="sidebar-footer">
+        <span id="connStatus" class="conn-status offline"><span class="conn-dot"></span><span class="conn-label">Not connected</span></span>
+      </div>
+    </aside>
+
+    <main class="content">
+
+      <!-- EMAILS -->
+      <section id="view-emails" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Emails</h2>
+            <p class="sub">Paste addresses, one per line. Each one is sent, then cleared from the list.</p>
+          </div>
+          <div class="header-actions">
+            <span id="queueCount" class="count-pill">0 queued</span>
+          </div>
+        </div>
+
+        <div class="queue-wrap">
+          <div class="queue-head">
+            <svg class="queue-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Recipients</span>
+          </div>
+          <textarea id="emailQueue" class="queue-box" rows="11" placeholder="jane.doe@company.com&#10;recruiter@otherco.com&#10;..."></textarea>
+        </div>
+
+        <div class="send-controls">
+          <div class="control-chip">
+            <span class="chip-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3v4a1 1 0 0 0 1 1h4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M6 21h9a2 2 0 0 0 2-2V8l-5-5H8a2 2 0 0 0-2 2v6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3.5 17.5h6M3.5 20h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <div class="chip-body">
+              <span class="control-label">Resume</span>
+              <select id="sendResumeSelect" class="chip-select">
+                <option value="">No resume uploaded</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-chip">
+            <span class="chip-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16v4H4zM4 10h16v10H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 14h8M8 17h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </span>
+            <div class="chip-body">
+              <span class="control-label">Template</span>
+              <select id="sendTemplateSelect" class="chip-select">
+                <option value="">No saved templates</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-chip">
+            <span class="chip-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <div class="chip-body">
+              <span class="control-label">Delay</span>
+              <div class="stepper">
+                <button type="button" id="delayMinus" class="stepper-btn">−</button>
+                <input type="number" id="sendDelay" min="1" max="120" value="4" />
+                <span class="stepper-unit">sec</span>
+                <button type="button" id="delayPlus" class="stepper-btn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <span class="spacer"></span>
+          <button id="clearQueueBtn" class="btn tiny">Clear list</button>
+          <button id="sendAllBtn" class="btn primary">Send all</button>
+        </div>
+
+        <div class="followup-config">
+          <label class="switch">
+            <input type="checkbox" id="followupToggle" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </label>
+          <div class="followup-body">
+            <span class="followup-title">Schedule a follow-up</span>
+            <p class="followup-desc">Sent automatically for each address above, this many days after the initial email — even if this tab is closed.</p>
+            <div class="followup-inline">
+              <div class="stepper">
+                <button type="button" id="followupDaysMinus" class="stepper-btn">−</button>
+                <input type="number" id="followupDays" min="1" max="14" value="3" disabled />
+                <span class="stepper-unit">days later</span>
+                <button type="button" id="followupDaysPlus" class="stepper-btn">+</button>
+              </div>
+              <select id="followupTemplateSelect" class="select-input followup-template-select" disabled>
+                <option value="">Save a template version first</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="sendProgress" class="progress-box hidden">
+          <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+          <span id="progressText"></span>
+          <button id="stopSendBtn" class="btn tiny danger">Stop</button>
+        </div>
+
+        <div id="failedBox" class="failed-box hidden">
+          <h4>Couldn't send</h4>
+          <ul id="failedList"></ul>
+        </div>
+      </section>
+
+      <!-- FOLLOW-UPS -->
+      <section id="view-followups" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Follow-ups</h2>
+            <p class="sub">Sent by a trigger on the backend, so these go out on schedule even with the app closed.</p>
+          </div>
+          <div class="header-actions">
+            <span id="followupCount" class="count-pill">0 pending</span>
+            <button id="checkFollowupsBtn" class="btn tiny">Check now</button>
+          </div>
+        </div>
+        <div id="followupList" class="followup-list">
+          <p class="muted">No follow-ups scheduled yet — turn one on from the Emails tab before sending.</p>
+        </div>
+      </section>
+
+      <!-- TEMPLATE -->
+      <section id="view-template" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Template</h2>
+            <p class="sub">This subject and body go out with every send. Draft is kept even if you close the tab.</p>
+          </div>
+          <div class="save-with-status">
+            <button id="saveTemplateBtn" class="btn primary">Save template</button>
+            <span id="templateSyncStatus" class="sync-status">Not saved to backend yet</span>
+          </div>
+        </div>
+        <div class="panel">
+          <label>Subject</label>
+          <input type="text" id="templateSubject" placeholder="e.g. IIT Tirupati EE student — VLSI internship, Jan 2027" />
+          <label>Email body</label>
+          <div class="rte">
+            <div class="rte-toolbar">
+              <button type="button" class="rte-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+              <button type="button" class="rte-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+              <button type="button" class="rte-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+              <span class="rte-sep"></span>
+              <select id="rteFont" class="rte-font" title="Font">
+                <option value="Arial, Helvetica, sans-serif">Arial</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                <option value="Verdana, Geneva, sans-serif">Verdana</option>
+                <option value="'Courier New', Courier, monospace">Courier New</option>
+              </select>
+              <span class="rte-sep"></span>
+              <div class="rte-color-group" role="group" aria-label="Text colour">
+                <button type="button" class="rte-swatch" data-color="#F2F3F7" style="--sw:#F2F3F7" title="Ink"></button>
+                <button type="button" class="rte-swatch" data-color="#18D6E8" style="--sw:#18D6E8" title="Cyan"></button>
+                <button type="button" class="rte-swatch" data-color="#7C6CFB" style="--sw:#7C6CFB" title="Indigo"></button>
+                <button type="button" class="rte-swatch" data-color="#3DDC97" style="--sw:#3DDC97" title="Green"></button>
+                <button type="button" class="rte-swatch" data-color="#FF6B57" style="--sw:#FF6B57" title="Red"></button>
+                <label class="rte-swatch rte-swatch-custom" title="Custom colour">
+                  <input type="color" id="rteColor" value="#18D6E8" />
+                </label>
+              </div>
+              <span class="rte-hint">select text, then pick a colour</span>
+            </div>
+            <div id="templateBody" class="rte-body" contenteditable="true" data-placeholder="Hi,&#10;&#10;I'm writing to..."></div>
+          </div>
+          <p class="hint">Your default resume (set in the Resume tab) is attached automatically — no need to link it here. Formatting here (bold, colour, font) is sent as HTML, which Gmail displays as styled text.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Saved versions</h3>
+          <p class="hint" style="margin:0 0 16px;">Save the draft above as a named version, then pick between versions from the Emails and Settings tabs.</p>
+          <div class="version-save-row">
+            <input type="text" id="newTemplateName" placeholder="Version name — e.g. Core Recruiters, Referral Ask" />
+            <button id="saveTemplateVersionBtn" class="btn secondary">Save as version</button>
+          </div>
+          <div id="templateVersionList" class="version-list">
+            <p class="muted">No saved versions yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESUME -->
+      <section id="view-resume" class="view">
+        <div class="view-header">
+          <div>
+            <h2>Resume</h2>
+            <p class="sub">The resume marked default is attached to every email you send.</p>
+          </div>
+          <div class="header-actions">
+            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" class="hidden" />
+            <button id="uploadResumeBtn" class="btn primary">Upload resume</button>
+          </div>
+        </div>
+        <div id="resumeList" class="resume-list">
+          <p class="muted">No resumes uploaded yet.</p>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="view-settings" class="view">
+        <div class="view-header"><h2>Settings</h2></div>
+
+        <div class="panel">
+          <h3>Backend connection</h3>
+          <label>Apps Script Web App URL</label>
+          <div class="field-row">
+            <input type="text" id="webAppUrl" placeholder="https://script.google.com/macros/s/XXXX/exec" />
+            <button id="saveUrlBtn" class="btn secondary">Save &amp; test connection</button>
+          </div>
+          <p class="hint">Connected Gmail account: <strong id="connectedGmail">—</strong></p>
+        </div>
+
+        <div class="panel">
+          <h3>Test send</h3>
+          <label>Send a test email to yourself</label>
+          <input type="email" id="testEmailAddress" name="email" autocomplete="email" placeholder="you@gmail.com" />
+
+          <div class="test-send-grid">
+            <div class="test-field">
+              <label>Resume to attach</label>
+              <select id="testResumeSelect" class="select-input">
+                <option value="">No resume uploaded</option>
+              </select>
+            </div>
+            <div class="test-field">
+              <label>Template to use</label>
+              <select id="testTemplateSelect" class="select-input">
+                <option value="">No saved templates</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row test-send-actions">
+            <button id="sendTestEmailBtn" class="btn secondary">Send test email</button>
+          </div>
+          <p class="hint">Uses the template picked above (or your current draft if none is picked) and attaches the chosen resume, so you can check both before a real send.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
